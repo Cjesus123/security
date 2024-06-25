@@ -11,9 +11,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Component
 public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 
     private WebClient.Builder webClient;
 
@@ -21,28 +26,48 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
         super(Config.class);
         this.webClient = webClient;
     }
+
     @Override
     public GatewayFilter apply(Config config) {
-        return (((exchange, chain) -> {
-            if(!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION))
+        return (exchange, chain) -> {
+            // Verifica si la solicitud contiene la cabecera de autorización
+            if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+                logger.warn("Solicitud sin cabecera de autorización");
                 return onError(exchange, HttpStatus.BAD_REQUEST);
+            }
+
+            // Obtiene el valor de la cabecera de autorización
             String tokenHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-            String [] chunks = tokenHeader.split(" ");
-            if(chunks.length != 2 || !chunks[0].equals("Bearer"))
+            String[] chunks = tokenHeader.split(" ");
+
+            // Verifica si la cabecera está en el formato correcto ("Bearer <token>")
+            if (chunks.length != 2 || !chunks[0].equals("Bearer")) {
+                logger.warn("Formato de cabecera de autorización incorrecto: {}", tokenHeader);
                 return onError(exchange, HttpStatus.BAD_REQUEST);
+            }
+
+            String token = chunks[1];
+            logger.info("Validando token: {}", token);
+
+            // Envía una solicitud al servicio de autenticación para validar el token
             return webClient.build()
                     .post()
-                    .uri("http://auth-service/auth/validate?token=" + chunks[1])
+                    .uri("http://auth-service/auth/validate?token=" + token)
                     .bodyValue(new RequestDto(exchange.getRequest().getPath().toString(), exchange.getRequest().getMethod().toString()))
-                    .retrieve().bodyToMono(TokenDto.class)
-                    .map(t -> {
-                        t.getToken();
+                    .retrieve()
+                    .bodyToMono(TokenDto.class)
+                    .map(tokenDto -> {
+                        logger.info("Token validado con éxito: {}", tokenDto.getToken());
                         return exchange;
-                    }).flatMap(chain::filter);
-        }));
+                    })
+                    .doOnError(error -> {
+                        logger.error("Error al validar el token: {}", error.getMessage());
+                    })
+                    .flatMap(chain::filter);
+        };
     }
 
-    public Mono<Void> onError(ServerWebExchange exchange, HttpStatus status){
+    public Mono<Void> onError(ServerWebExchange exchange, HttpStatus status) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(status);
         return response.setComplete();
