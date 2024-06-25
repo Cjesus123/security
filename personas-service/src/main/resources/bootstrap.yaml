@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: personas-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081
+  datasource:
+    url: jdbc:mysql://localhost:3306/tesis_v1?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 12345
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true

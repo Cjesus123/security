@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: user-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081
+  datasource:
+    url: jdbc:mysql://localhost:3306/tesis?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 12345
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update

@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: auth-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081
+  datasource:
+    url: jdbc:mysql://localhost:3306/tesis_v1?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 12345
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: huancocristian@gmail.com
+    password: djmvfckbudqqybfd
+    properties:
+      mail:
+        smtp:
+          auth: true
+        starttls:
+          enable: true
+        ssl:
+          trust: smtp.gmail.com
+        urlFront:  http://localhost:4200/login/changepassword/
+
+jwt:
+  secret: wIXZCWObK5oSdZriKq17XKf77UanlW/ZP/X8A7h50YPlMKcNNWIYsA+B1yJdGCHzpA02RQHqeu3JpNsI150oeQ==
+  expiration: 36000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
