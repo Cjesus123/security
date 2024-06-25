@@ -22,10 +22,10 @@ spring:
       mail:
         smtp:
           auth: true
-        starttls:
-          enable: true
-        ssl:
-          trust: smtp.gmail.com
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
 
 mail:
   urlFront: http://localhost:4200/login/changepassword/
