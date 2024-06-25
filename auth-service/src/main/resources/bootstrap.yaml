@@ -26,11 +26,14 @@ spring:
           enable: true
         ssl:
           trust: smtp.gmail.com
-        urlFront:  http://localhost:4200/login/changepassword/
+
+mail:
+  urlFront: http://localhost:4200/login/changepassword/
 
 jwt:
   secret: wIXZCWObK5oSdZriKq17XKf77UanlW/ZP/X8A7h50YPlMKcNNWIYsA+B1yJdGCHzpA02RQHqeu3JpNsI150oeQ==
   expiration: 36000
+
 
 eureka:
   client:
@@ -38,3 +41,15 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
+  admin-paths:
+    paths:
+      - uri: "/user"
+        method: "POST"
+      - uri: "/user/savecar/{1}[1-9]+[0-9]*"
+        method: "POST"
+      - uri: "/user/savebike/{1}[1-9]+[0-9]*"
+        method: "GET"
+      - uri: "/personas/lista/"
+        method: "GET"
+      - uri: "/personas/registrar"
+        method: "POST"

@@ -27,6 +27,7 @@ public class AuthUserController {
 
     @PostMapping("/validate")
     public ResponseEntity<TokenDto> validate(@RequestParam String token, @RequestBody RequestDto dto){
+        System.out.println(token + " " +  dto.getMethod() + " " + dto.getUri());
         TokenDto tokenDto = authUserService.validate(token, dto);
         if(tokenDto == null)
             return ResponseEntity.badRequest().build();

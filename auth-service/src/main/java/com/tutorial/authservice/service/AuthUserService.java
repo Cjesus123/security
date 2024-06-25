@@ -40,6 +40,14 @@ public class AuthUserService {
 
      */
 
+    public void save(User user) {
+        this.authUserRepository.save(user);
+    }
+
+    public Optional<User> getByUsernameOrEmail(String usernameOrEmail) {
+        return authUserRepository.findByUserNameOrEmail(usernameOrEmail,usernameOrEmail);
+    }
+
     public TokenDto login(AuthUserDto dto) {
         Optional<User> user = authUserRepository.findByUserNameOrEmail(dto.getUserName(),dto.getUserName());
         if(user.isEmpty())
@@ -47,6 +55,10 @@ public class AuthUserService {
         if(passwordEncoder.matches(dto.getPassword(), user.get().getPassword()))
             return new TokenDto(jwtProvider.createToken(user.get()));
         return null;
+    }
+
+    public Optional<User> getByTokenPassword(String tokenPassword){
+        return authUserRepository.findByTokenPassword(tokenPassword);
     }
 
     public TokenDto validate(String token, RequestDto dto) {

@@ -35,3 +35,7 @@ spring:
           uri: lb://auth-service
           predicates:
             - Path=/auth/**
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/email-password/**

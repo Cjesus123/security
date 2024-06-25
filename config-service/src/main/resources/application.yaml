@@ -5,8 +5,8 @@ spring:
     config:
       server:
         git:
-          default-label: auth-jwt-role
-          uri: https://github.com/cavanosa/microservices-tutorial
+          default-label: main
+          uri: https://github.com/Cjesus123/security
           search-paths: config-data
   application:
     name: config-service
