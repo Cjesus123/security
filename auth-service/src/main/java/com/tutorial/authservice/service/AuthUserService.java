@@ -62,11 +62,13 @@ public class AuthUserService {
     }
 
     public TokenDto validate(String token, RequestDto dto) {
-        if(!jwtProvider.validate(token, dto))
+        if(!jwtProvider.validate(token, dto)) {
             return null;
+        }
         String username = jwtProvider.getUserNameFromToken(token);
-        if(authUserRepository.findByUserNameOrEmail(username,null).isEmpty())
-            return null;
+        if(authUserRepository.findByUserNameOrEmail(username,username).isEmpty()){
+            return null;}
+        System.out.println(token);
         return new TokenDto(token);
     }
 }

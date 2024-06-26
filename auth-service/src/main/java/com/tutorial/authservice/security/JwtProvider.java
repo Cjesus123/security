@@ -51,6 +51,7 @@ public class JwtProvider {
         }
         if(!isAdmin(token) && routeValidator.isAdminPath(dto))
             return false;
+        System.out.println("VA A RETORNAR TRUE");
         return true;
     }
 

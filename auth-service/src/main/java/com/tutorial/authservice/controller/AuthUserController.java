@@ -27,10 +27,14 @@ public class AuthUserController {
 
     @PostMapping("/validate")
     public ResponseEntity<TokenDto> validate(@RequestParam String token, @RequestBody RequestDto dto){
-        System.out.println(token + " " +  dto.getMethod() + " " + dto.getUri());
+        System.out.println("ENTRO AL CONTROLLER");
         TokenDto tokenDto = authUserService.validate(token, dto);
-        if(tokenDto == null)
+        if(tokenDto == null) {
+            System.out.println(tokenDto);
             return ResponseEntity.badRequest().build();
+        }
+
+        System.out.println(dto.getMethod());
         return ResponseEntity.ok(tokenDto);
     }
 

@@ -82,8 +82,8 @@ public class User {
         this.password = password;
     }
 
-    public @NotNull Role getRole() {
-        return role;
+    public @NotNull String getRole() {
+        return role.getRoleName().name();
     }
 
     public void setRole(@NotNull Role role) {

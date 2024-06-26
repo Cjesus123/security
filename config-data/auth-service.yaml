@@ -17,3 +17,5 @@ admin-paths:
       method: "POST"
     - uri: "/user/savebike/{1}[1-9]+[0-9]*"
       method: "GET"
+    - uri: "/user/personas/lista"
+      method: "GET"
